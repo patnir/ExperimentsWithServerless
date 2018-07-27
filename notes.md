@@ -1,7 +1,3 @@
-
-
-
-
 ## Miscellaneous notes and frequently used resources
 
 Node and NPM version checks: 
