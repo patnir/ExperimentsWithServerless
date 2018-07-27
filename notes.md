@@ -142,3 +142,21 @@ $ aws cognito-idp admin-confirm-sign-up \
 
 9. [Set up the Serverless Framework](https://serverless-stack.com/chapters/setup-the-serverless-framework.html)
 - Use AWS Lambda and Amazon API Gateway
+
+10. [Create Node API](https://serverless-stack.com/chapters/add-a-create-note-api.html)
+- create.js
+- udpate serverless.yml
+- wrote test in mocks folder
+- refactored by moving code to libs folder
+
+11. [Get Node API](https://serverless-stack.com/chapters/add-a-get-note-api.html) Same process as create: 
+- get.js
+- update serverless
+- use refactored code in libs folder
+- test in mocks folder
+
+
+
+11. [Add Get Note API]
+
+
