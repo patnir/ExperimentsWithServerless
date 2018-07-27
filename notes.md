@@ -95,6 +95,30 @@ arn:aws:s3:::my_corporate_bucket/exampleobject.png
 
 cross-origin resource sharing (**CORS**) defines a way for client web applications that are loaded in one domain to interact with resources in a different domain. 
 
+**Cognito User Pool**
+Amazon Cognito User Pool makes it easy for developers to add sign-up and sign-in functionality to web and mobile applications.
+
+**Cognito Identity Pool**
+Amazon Cognito Federated Identities enables developers to create unique identities for your users and authenticate them with federated identity providers. 
+> With a federated identity, you can obtain temporary, limited-privilege AWS credentials to securely access other AWS services such as Amazon DynamoDB, Amazon S3, and Amazon API Gateway.
+
+**User Pool vs Identity Pool** 
+
+User Pool: 
+- Easy for developers to add sign up and sign in functionality 
+- Serves as your own identity porvider to maintain a user directory
+- Supports user registration and sign-in
+- Provisions identity tokens for signed-in users
+
+Identity Pool: 
+- Enables deverlopers to create unique identities for your users 
+- Authenticate users with federated identity providers
+- With federal identity, you can obtain temporary and limited AWS credentials to securely acces other AWS services such as S3, API Gateway, DynamoDB
+
+Cognito Identity Pool simple takes all your identity porvides and puts tehm together
+
+> The Cognito User Pool stores all your users which then plugs into your Cognito Identity Pool which can give your users access to your AWS services.
+
 
 ### Steps so far
 
@@ -167,8 +191,43 @@ $ aws cognito-idp admin-confirm-sign-up \
 
 #### DEPLOYING THE BACKEND
 
-15. []()
+15. [Deploy the API](https://serverless-stack.com/chapters/deploy-the-apis.html)
+```
+$ serverless deploy
 
+# To deploy multiple profiles: 
+$ serverless deploy --aws-profile myProfile
 
+# Deploy a single function
+$ serverless deploy function -f list
 
+# Service Informatino Example
+Service Information
+service: notes-app-api
+stage: prod
+region: us-east-1
+api keys:
+  None
+endpoints:
+  POST - https://ly55wbovq4.execute-api.us-east-1.amazonaws.com/prod/notes
+  GET - https://ly55wbovq4.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+  GET - https://ly55wbovq4.execute-api.us-east-1.amazonaws.com/prod/notes
+  PUT - https://ly55wbovq4.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+  DELETE - https://ly55wbovq4.execute-api.us-east-1.amazonaws.com/prod/notes/{id}
+functions:
+  notes-app-api-prod-create
+  notes-app-api-prod-get
+  notes-app-api-prod-list
+  notes-app-api-prod-update
+  notes-app-api-prod-delete
+
+ly55wbovq4 is our API Gateway ID
+us-east-1 is our API Gateway Region
+
+```
+16. [Create a Cognito Identity Pool](https://serverless-stack.com/chapters/create-a-cognito-identity-pool.html)
+
+> I think at some point I can just rely on Google and Facebook as login options and not care about having Amazon's Cognito User Pool as a way to create new accounts. 
+
+17. [Test the APIs](https://serverless-stack.com/chapters/test-the-apis.html)
 

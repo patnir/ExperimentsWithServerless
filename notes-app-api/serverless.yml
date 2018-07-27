@@ -60,29 +60,29 @@ functions:
     handler: list.main
     events:
       - http:
-        path: notes
-        method: get
-        cors: true
-        authorizer: aws_iam
+          path: notes
+          method: get
+          cors: true
+          authorizer: aws_iam
 
 
   update: 
     handler: update.main
     events: 
       - http:
-        path: notes/{id}
-        method: put
-        cors: true
-        authorizer: aws_iam
+          path: notes/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
 
   delete: 
     handler: delete.main
     events: 
       - http: 
-        path: notes/{id}
-        method: delete
-        cors: true
-        authorizer: aws_iam
+          path: notes/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
 
         
 
