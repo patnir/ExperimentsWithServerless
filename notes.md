@@ -105,6 +105,8 @@ cross-origin resource sharing (**CORS**) defines a way for client web applicatio
 $ sudo pip install awscli
 $ aws configure
 ```
+
+#### SETTING UP THE SERVERLESS BACKEND
 3. [Create a DynamoDB Table](https://serverless-stack.com/chapters/create-a-dynamodb-table.html)
 
 4. [Create an S3 Bucket](https://serverless-stack.com/chapters/create-an-s3-bucket-for-file-uploads.html)
@@ -143,6 +145,8 @@ $ aws cognito-idp admin-confirm-sign-up \
 9. [Set up the Serverless Framework](https://serverless-stack.com/chapters/setup-the-serverless-framework.html)
 - Use AWS Lambda and Amazon API Gateway
 
+#### BUILDING A SERVERLESS REST API
+
 10. [Create Node API](https://serverless-stack.com/chapters/add-a-create-note-api.html)
 - create.js
 - udpate serverless.yml
@@ -155,8 +159,16 @@ $ aws cognito-idp admin-confirm-sign-up \
 - use refactored code in libs folder
 - test in mocks folder
 
+12. [Add List Node API](https://serverless-stack.com/chapters/add-a-list-all-the-notes-api.html)
+
+13. [Add Update Node API](https://serverless-stack.com/chapters/add-an-update-note-api.html)
+
+14. [Add Delete Node API](https://serverless-stack.com/chapters/add-a-delete-note-api.html)
+
+#### DEPLOYING THE BACKEND
+
+15. []()
 
 
-11. [Add Get Note API]
 
 
