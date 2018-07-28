@@ -230,4 +230,11 @@ us-east-1 is our API Gateway Region
 > I think at some point I can just rely on Google and Facebook as login options and not care about having Amazon's Cognito User Pool as a way to create new accounts. 
 
 17. [Test the APIs](https://serverless-stack.com/chapters/test-the-apis.html)
+```
+$ npx aws-api-gateway-cli-test
+```
+
+#### SETTING UP A REACT APP
+
+18. [Create a New React.js App](https://serverless-stack.com/chapters/create-a-new-reactjs-app.html)
 
