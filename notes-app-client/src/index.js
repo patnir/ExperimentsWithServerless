@@ -6,6 +6,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import "./index.css";
 import Amplify from "aws-amplify";
 import config from "./config";
+import AppliedRoute from "./components/AppliedRoute";
 
 Amplify.configure({
     Auth: {
