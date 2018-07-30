@@ -64,20 +64,6 @@ export default class Notes extends Component {
     this.file = event.target.files[0];
   }
   
-  // handleDelete = async event => {
-  //   event.preventDefault();
-  
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to delete this note?"
-  //   );
-  
-  //   if (!confirmed) {
-  //     return;
-  //   }
-  
-  //   this.setState({ isDeleting: true });
-  // }
-  
   
   handleDelete = async event => {
     event.preventDefault();
@@ -91,7 +77,6 @@ export default class Notes extends Component {
     }
   
     this.setState({ isDeleting: true });
-    alert(this.state.note.attachment);
 
 
     try {
@@ -119,11 +104,7 @@ export default class Notes extends Component {
   }
 
   deleteAttachment(attachment) {
-    return Storage.vault.remove({
-      bucket: "notes-app-ews-uploads", 
-      key: attachment
-    }
-    );
+    return Storage.vault.remove(attachment);
   }
 
   deleteNote() {
@@ -145,6 +126,11 @@ export default class Notes extends Component {
     try {
       if (this.file) {
         attachment = await s3Upload(this.file);
+        alert(this.state.note.attachment);
+
+        if (this.state.note.attachment) {
+          await this.deleteAttachment(this.state.note.attachment);
+        }
       }
 
       await this.saveNote({
