@@ -91,11 +91,17 @@ export default class Notes extends Component {
     }
   
     this.setState({ isDeleting: true });
+    alert(this.state.note.attachment);
+
 
     try {
 
-      await this.deleteNote();
+      if (this.state.note.attachment) {
+        await this.deleteAttachment(this.state.note.attachment);
+      }      
 
+
+      await this.deleteNote();
       this.props.history.push("/");
 
     } catch (e) {
@@ -110,6 +116,14 @@ export default class Notes extends Component {
     return API.put("notes", `/notes/${this.props.match.params.id}`, {
       body: note
     });
+  }
+
+  deleteAttachment(attachment) {
+    return Storage.vault.remove({
+      bucket: "notes-app-ews-uploads", 
+      key: attachment
+    }
+    );
   }
 
   deleteNote() {
