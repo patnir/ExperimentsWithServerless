@@ -9,7 +9,6 @@ import LoaderButton from "../components/LoaderButton";
 import "./Signup.css";
 import { Auth } from "aws-amplify";
 
-
 export default class Signup extends Component {
   constructor(props) {
     super(props);
@@ -44,38 +43,52 @@ export default class Signup extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-  
+
     this.setState({ isLoading: true });
-  
+
     try {
-      const newUser = await Auth.signUp({
-        username: this.state.email,
-        password: this.state.password
-      });
-      this.setState({
-        newUser
-      });
+        const newUser = await Auth.signUp({
+            username: this.state.email,
+            password: this.state.password
+        });
+        this.setState({
+            newUser
+        });
+
     } catch (e) {
-      alert(e.message);
+        alert(e.message);
     }
-  
     this.setState({ isLoading: false });
   }
-  
+
+handleResendSubmit = async event => {
+      event.preventDefault();
+      this.setState({isLoading: true});
+
+      try {
+        await Auth.resendSignUp(this.state.email);
+        alert("Confirmation code resent to " + this.state.email);
+        this.setState({isLoading: false});
+      } catch(e) {
+        alert(e.message);
+        this.setState({isLoading: false});
+    }
+}
+
   handleConfirmationSubmit = async event => {
     event.preventDefault();
-  
+
     this.setState({ isLoading: true });
-  
+
     try {
-      await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
-      await Auth.signIn(this.state.email, this.state.password);
-  
-      this.props.userHasAuthenticated(true);
-      this.props.history.push("/");
-    } catch (e) {
-      alert(e.message);
-      this.setState({ isLoading: false });
+        await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
+        await Auth.signIn(this.state.email, this.state.password);
+
+        this.props.userHasAuthenticated(true);
+        this.props.history.push("/");
+    } catch(e) {
+        alert(e.message);
+        this.setState({isLoading: false});
     }
   }
 
@@ -100,6 +113,14 @@ export default class Signup extends Component {
           isLoading={this.state.isLoading}
           text="Verify"
           loadingText="Verifying…"
+        />
+        <LoaderButton
+          block
+          bsSize="large"          
+          isLoading={this.state.isLoading}
+          text="Resend Code"
+          loadingText="Sending"
+          onClick={this.handleResendSubmit}
         />
       </form>
     );
@@ -156,3 +177,17 @@ export default class Signup extends Component {
     );
   }
 }
+
+
+        // <form onSubmit={this.handleResendSubmit}>
+        //     <FormGroup controlId="confirmationCode" bsSize="large">
+        //   <ControlLabel>Confirmation Code</ControlLabel>
+        //   <FormControl
+        //     autoFocus
+        //     type="tel"
+        //     value={this.state.confirmationCode}
+        //     onChange={this.handleChange}
+        //   />
+        //   <HelpBlock>Please check your email for the code.</HelpBlock>
+        // </FormGroup>
+        // </form>
