@@ -64,21 +64,6 @@ export default class Notes extends Component {
     this.file = event.target.files[0];
   }
   
-  handleDelete = async event => {
-    event.preventDefault();
-  
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this note?"
-    );
-  
-    if (!confirmed) {
-      return;
-    }
-  
-    this.setState({ isDeleting: true });
-  }
-  
-  
   // handleDelete = async event => {
   //   event.preventDefault();
   
@@ -91,25 +76,44 @@ export default class Notes extends Component {
   //   }
   
   //   this.setState({ isDeleting: true });
-
-  //   try {
-
-
-
-  //     this.props.history.push("/");
-
-  //   } catch (e) {
-  //     alert(e.message);
-  //     this.setState({ isDeleting: false });
-
-  //   }
-    
   // }
+  
+  
+  handleDelete = async event => {
+    event.preventDefault();
+  
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this note?"
+    );
+  
+    if (!confirmed) {
+      return;
+    }
+  
+    this.setState({ isDeleting: true });
+
+    try {
+
+      await this.deleteNote();
+
+      this.props.history.push("/");
+
+    } catch (e) {
+      alert(e.message);
+      this.setState({ isDeleting: false });
+
+    }
+    
+  }
   
   saveNote(note) {
     return API.put("notes", `/notes/${this.props.match.params.id}`, {
       body: note
     });
+  }
+
+  deleteNote() {
+    return API.del("notes", `/notes/${this.props.match.params.id}`);
   }
 
   handleSubmit = async event => {
