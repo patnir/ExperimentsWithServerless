@@ -247,4 +247,10 @@ $ npx aws-api-gateway-cli-test
 - Route 53 to manage our domain 
 - Certificate Manager to handle SSL certificate
 
-20. 
+20. Deploy Updates
+> Process is very similar to how we deployed our code to S3 with a few changes
+- Build our app with the changes
+- Deploy to the main S3 BUcket
+- Invalidate cache in both our CloudFront Distributions
+
+
