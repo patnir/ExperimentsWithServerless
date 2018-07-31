@@ -238,3 +238,13 @@ $ npx aws-api-gateway-cli-test
 
 18. [Create a New React.js App](https://serverless-stack.com/chapters/create-a-new-reactjs-app.html)
 
+#### DEPLOYING A REACT APP ON AWS
+
+19. [Deploy the Frontend](https://serverless-stack.com/chapters/deploy-the-frontend.html)
+> Upload the assets of our app, Use a CDN to serve out our assets, Point our domain to the CDN distribution, Switch to HTTPS with a SSL certificate
+- S3 to host our assets
+- Cloud Front to serve assets
+- Route 53 to manage our domain 
+- Certificate Manager to handle SSL certificate
+
+20. 

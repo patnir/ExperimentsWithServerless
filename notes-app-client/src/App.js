@@ -43,7 +43,13 @@ class App extends Component {
 
     }
 
+    openGithub = () => {
+      window.open("https://github.com/patnir")
+    }
 
+    openLinkedIn = () => {
+      window.open("https://www.linkedin.com/in/rahulpatni/")
+    }
   
   render() {
     const childProps = {
@@ -65,6 +71,9 @@ class App extends Component {
             {this.state.isAuthenticated
   ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
   : <Fragment>
+        <NavItem onClick={this.openLinkedIn}><a>LinkedIn</a></NavItem>
+        <NavItem onClick={this.openGithub}><a>Github</a></NavItem>
+      
       <LinkContainer to="/signup">
         <NavItem>Signup</NavItem>
       </LinkContainer>
