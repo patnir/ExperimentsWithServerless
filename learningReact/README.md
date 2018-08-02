@@ -52,3 +52,11 @@ We suggest that you begin by typing:
   cd react-app
   npm start
 ```
+
+Props:
+
+> Data that is given to a component. React does not allow you to change the value of props for a particular component.
+
+State:
+
+> Data that is local or private to that component
