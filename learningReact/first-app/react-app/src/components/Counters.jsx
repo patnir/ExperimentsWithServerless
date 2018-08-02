@@ -3,11 +3,12 @@ import Counter from "./Counter";
 
 class Counters extends Component {
   state = {
+    totalCreated: 4,
     counters: [
-      { id: 0, value: 4 },
-      { id: 1, value: 4 },
-      { id: 2, value: 4 },
-      { id: 3, value: 4 }
+      { id: 0, value: 0 },
+      { id: 1, value: 0 },
+      { id: 2, value: 0 },
+      { id: 3, value: 0 }
     ]
   };
 
@@ -21,8 +22,43 @@ class Counters extends Component {
     });
   };
 
+  handleAdd = () => {
+    const counters = [...this.state.counters];
+    const totalCreated = this.state.totalCreated;
+    counters.push({
+      id: totalCreated,
+      value: 0
+    });
+
+    // alert(counters.length);
+    this.setState({
+      counters: counters,
+      totalCreated: totalCreated + 1
+    });
+  };
+
   handleDelete = currid => {
     const counters = this.state.counters.filter(c => c.id !== currid);
+    this.setState({
+      counters: counters
+    });
+  };
+
+  handleIncrement = counter => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    counters[index] = { ...counter };
+    counters[index].value++;
+    this.setState({
+      counters
+    });
+  };
+
+  handleCounterRest = currentCounter => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(currentCounter);
+    counters[index] = { ...currentCounter };
+    counters[index].value = 0;
     this.setState({
       counters: counters
     });
@@ -37,15 +73,22 @@ class Counters extends Component {
         >
           Reset
         </button>
+        <button
+          onClick={this.handleAdd}
+          className="btn btn-primary m-4 btn-small"
+        >
+          Add
+        </button>
         {this.state.counters.map((counter, i) => (
           <div>
-            <span>{counter.id}</span>
             <Counter
               key={counter.id}
               counter={counter}
               onDelete={this.handleDelete}
+              onReset={this.handleCounterRest}
+              onIncrement={this.handleIncrement}
             >
-              <h4>Counter ID: {counter.id}</h4>
+              <h6>Counter ID: {counter.id}</h6>
             </Counter>
           </div>
         ))}

@@ -13,29 +13,17 @@ class Counter extends Component {
   //   });
   // };
 
-  updateIncrement = incrementValue => {
-    this.setState({
-      value: this.state.value + incrementValue
-    });
-  };
-
-  resetIncrement = () => {
-    this.setState({
-      value: 0
-    });
-  };
-
   formatCount() {
-    return this.state.value === 0 ? "Zero" : this.state.value;
+    return this.props.counter.value === 0 ? "Zero" : this.props.counter.value;
   }
 
   renderList() {
-    if (this.state.value === 0) {
+    if (this.props.counter.value === 0) {
       return <h1> Zero Elements </h1>;
     }
     return (
       <ul>
-        {this.state.tags.map((tag, i) => (
+        {this.props.counter.tags.map((tag, i) => (
           <li key={tag}>
             {tag} {i}
           </li>
@@ -46,12 +34,12 @@ class Counter extends Component {
 
   render() {
     let classes = "badge m-4 badge-";
-    classes += this.state.value === 0 ? "warning" : "primary";
+    classes += this.props.counter.value === 0 ? "warning" : "primary";
 
     return (
       <React.Fragment>
         <div>
-          <img src={this.state.imageUrl} alt="" />
+          <img className="m-4" src={this.state.imageUrl} alt="" />
 
           <span
             style={{ fontWeight: "bold", fontSize: "30px" }}
@@ -61,13 +49,13 @@ class Counter extends Component {
           </span>
           <button
             className="btn btn-secondary btn-sm m-4"
-            onClick={() => this.updateIncrement(1)}
+            onClick={() => this.props.onIncrement(this.props.counter)}
           >
             Increment
           </button>
           <button
             className="btn btn-secondary btn-sm m-4"
-            onClick={this.resetIncrement}
+            onClick={() => this.props.onReset(this.props.counter)}
           >
             Reset
           </button>
@@ -78,7 +66,7 @@ class Counter extends Component {
             Delete
           </button>
           <div>
-            {this.state.value === 0 && this.props.children}
+            {this.props.counter.value === 0 && this.props.children}
             {/* {this.renderList()} */}
           </div>
         </div>
