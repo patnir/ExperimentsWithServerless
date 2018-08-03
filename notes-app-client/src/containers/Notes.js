@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { API, Storage } from "aws-amplify";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
 
-
 export default class Notes extends Component {
   constructor(props) {
     super(props);
-
     this.file = null;
 
     this.state = {
@@ -26,6 +24,7 @@ export default class Notes extends Component {
     try {
       let attachmentURL;
       const note = await this.getNote();
+
       const { content, attachment } = note;
 
       if (attachment) {
@@ -49,54 +48,47 @@ export default class Notes extends Component {
   validateForm() {
     return this.state.content.length > 0;
   }
-  
+
   formatFilename(str) {
     return str.replace(/^\w+-/, "");
   }
-  
+
   handleChange = event => {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
-  
+  };
+
   handleFileChange = event => {
     this.file = event.target.files[0];
-  }
-  
-  
+  };
+
   handleDelete = async event => {
     event.preventDefault();
-  
+
     const confirmed = window.confirm(
       "Are you sure you want to delete this note?"
     );
-  
+
     if (!confirmed) {
       return;
     }
-  
+
     this.setState({ isDeleting: true });
 
-
     try {
-
       if (this.state.note.attachment) {
         await this.deleteAttachment(this.state.note.attachment);
-      }      
-
+      }
 
       await this.deleteNote();
       this.props.history.push("/");
-
     } catch (e) {
       alert(e.message);
       this.setState({ isDeleting: false });
-
     }
-    
-  }
-  
+  };
+
   saveNote(note) {
     return API.put("notes", `/notes/${this.props.match.params.id}`, {
       body: note
@@ -117,11 +109,14 @@ export default class Notes extends Component {
     event.preventDefault();
 
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(`Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE/1000000} MB.`);
+      alert(
+        `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
+          1000000} MB.`
+      );
       return;
-    }  
-    
-    this.setState({isLoading: true});
+    }
+
+    this.setState({ isLoading: true });
 
     try {
       if (this.file) {
@@ -139,17 +134,16 @@ export default class Notes extends Component {
       });
 
       this.props.history.push("/");
-
     } catch (e) {
       alert(e);
       this.setState({ isLoading: false });
     }
-  }
+  };
 
   render() {
     return (
       <div className="Notes">
-        {this.state.note &&
+        {this.state.note && (
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="content">
               <FormControl
@@ -158,7 +152,7 @@ export default class Notes extends Component {
                 componentClass="textarea"
               />
             </FormGroup>
-            {this.state.note.attachment &&
+            {this.state.note.attachment && (
               <FormGroup>
                 <ControlLabel>Attachment</ControlLabel>
                 <FormControl.Static>
@@ -170,12 +164,17 @@ export default class Notes extends Component {
                     {this.formatFilename(this.state.note.attachment)}
                   </a>
                 </FormControl.Static>
-              </FormGroup>}
+              </FormGroup>
+            )}
             <FormGroup controlId="file">
-              {!this.state.note.attachment &&
-                <ControlLabel>Attachment</ControlLabel>}
+              {!this.state.note.attachment && (
+                <ControlLabel>Attachment</ControlLabel>
+              )}
               <FormControl onChange={this.handleFileChange} type="file" />
             </FormGroup>
+            <Button block bsStyle="primary" bsSize="large" disabled>
+              Check
+            </Button>
             <LoaderButton
               block
               bsStyle="primary"
@@ -195,7 +194,8 @@ export default class Notes extends Component {
               text="Delete"
               loadingText="Deleting…"
             />
-          </form>}
+          </form>
+        )}
       </div>
     );
   }
