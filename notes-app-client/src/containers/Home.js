@@ -28,10 +28,9 @@ export default class Home extends Component {
 
     try {
       const notes = await this.notes();
-      const userCreds = await this.currentUserCredentials();
-      const currentUserId = userCreds;
-      console.log(currentUserId);
-      this.setState({ notes });
+      const userCreds = await Auth.currentUserCredentials();
+      const currentUserId = userCreds.data.IdentityId;
+      this.setState({ notes, currentUserId });
     } catch (e) {
       alert(e);
     }
@@ -55,10 +54,7 @@ export default class Home extends Component {
               onClick={this.handleNoteClick}
               header={note.content.trim().split("\n")[0]}
             >
-              {"Created: " +
-                new Date(note.createdAt).toLocaleString() +
-                ", " +
-                note.userId}
+              {"Created: " + new Date(note.createdAt).toLocaleString()}
             </ListGroupItem>
           ) : (
             <ListGroupItem

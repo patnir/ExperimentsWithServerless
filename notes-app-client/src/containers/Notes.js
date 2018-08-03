@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { API, Storage } from "aws-amplify";
+import { API, Storage, Auth } from "aws-amplify";
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import config from "../config";
@@ -16,6 +16,7 @@ export default class Notes extends Component {
       isDeleting: null,
       note: null,
       content: "",
+      currentUserId: null,
       attachmentURL: null
     };
   }
@@ -24,6 +25,8 @@ export default class Notes extends Component {
     try {
       let attachmentURL;
       const note = await this.getNote();
+      const userCreds = await Auth.currentUserCredentials();
+      const currentUserId = userCreds.data.IdentityId;
 
       const { content, attachment } = note;
 
@@ -34,7 +37,8 @@ export default class Notes extends Component {
       this.setState({
         note,
         content,
-        attachmentURL
+        attachmentURL,
+        currentUserId
       });
     } catch (e) {
       alert(e);
@@ -172,9 +176,11 @@ export default class Notes extends Component {
               )}
               <FormControl onChange={this.handleFileChange} type="file" />
             </FormGroup>
-            <Button block bsStyle="primary" bsSize="large" disabled>
-              Check
-            </Button>
+            {this.state.currentUserId === this.state.note.userId ? (
+              <Button block bsStyle="primary" bsSize="large">
+                Check
+              </Button>
+            ) : null}
             <LoaderButton
               block
               bsStyle="primary"
