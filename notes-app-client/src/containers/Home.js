@@ -17,7 +17,8 @@ export default class Home extends Component {
     this.state = {
       currentUserId: null,
       isLoading: true,
-      notes: []
+      notes: [],
+      allnotes: []
     };
   }
 
@@ -28,9 +29,10 @@ export default class Home extends Component {
 
     try {
       const notes = await this.notes();
+      const allnotes = await this.allnotes();
       const userCreds = await Auth.currentUserCredentials();
       const currentUserId = userCreds.data.IdentityId;
-      this.setState({ notes, currentUserId });
+      this.setState({ allnotes, notes, currentUserId });
     } catch (e) {
       alert(e);
     }
@@ -40,6 +42,10 @@ export default class Home extends Component {
 
   notes() {
     return API.get("notes", "/notes");
+  }
+
+  allnotes() {
+    return API.get("notes", "/allnotes");
   }
 
   renderNotesList(notes) {
@@ -53,6 +59,7 @@ export default class Home extends Component {
               href={`/notes/${note.noteId}`}
               onClick={this.handleNoteClick}
               header={note.content.trim().split("\n")[0]}
+              bsStyle={this.state.currentUserId == note.userId ? "info" : null}
             >
               {"Created: " + new Date(note.createdAt).toLocaleString()}
             </ListGroupItem>
@@ -96,7 +103,7 @@ export default class Home extends Component {
   renderNotes() {
     return (
       <div className="notes">
-        <PageHeader>Your Notes</PageHeader>
+        <PageHeader>Notes</PageHeader>
         <ListGroupItem
           key="new"
           href="/notes/new"
@@ -110,7 +117,8 @@ export default class Home extends Component {
         <Tabs defaultActiveKey={1} animation={false} id="noanim-tab-example">
           <Tab eventKey={1} title="All Notes">
             <ListGroup style={{ marginTop: "20px" }}>
-              {!this.state.isLoading && this.renderNotesList(this.state.notes)}
+              {!this.state.isLoading &&
+                this.renderNotesList(this.state.allnotes)}
             </ListGroup>
           </Tab>
           <Tab eventKey={2} title="Your Notes">

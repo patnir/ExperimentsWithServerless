@@ -69,7 +69,7 @@ functions:
     handler: scan.main
     events:
       - http:
-          path: notes
+          path: allnotes
           method: get
           cors: true
           authorizer: aws_iam
