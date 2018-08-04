@@ -5,6 +5,12 @@ import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
+import LocationPicker from "react-location-picker";
+
+const defaultPosition = {
+  lat: 40.7484,
+  lng: -73.9857
+};
 
 export default class Notes extends Component {
   constructor(props) {
@@ -12,13 +18,37 @@ export default class Notes extends Component {
     this.file = null;
 
     this.state = {
+      isPageLoading: true,
       isLoading: null,
       isDeleting: null,
       note: null,
       content: "",
       currentUserId: null,
-      attachmentURL: null
+      attachmentURL: null,
+      location: {
+        address: "350 5th Ave, New York, NY 10118",
+        position: {
+          lat: 0,
+          lng: 0
+        }
+      }
     };
+
+    this.handleLocationChange = this.handleLocationChange.bind(this);
+  }
+
+  handleLocationChange(result) {
+    console.log(result);
+    console.log(result.position);
+    console.log(result.address);
+
+    // Set new location
+    const location = {
+      position: result.position,
+      address: result.address
+    };
+    console.log(location);
+    this.setState({ location });
   }
 
   async componentDidMount() {
@@ -39,6 +69,10 @@ export default class Notes extends Component {
         content,
         attachmentURL,
         currentUserId
+      });
+
+      this.setState({
+        isPageLoading: false
       });
     } catch (e) {
       alert(e);
@@ -176,11 +210,24 @@ export default class Notes extends Component {
               )}
               <FormControl onChange={this.handleFileChange} type="file" />
             </FormGroup>
-            {this.state.currentUserId === this.state.note.userId ? (
+
+            {this.state.isPageLoading ? null : (
+              <LocationPicker
+                containerElement={
+                  <div style={{ height: "100%", marginBottom: "20px" }} />
+                }
+                zoom={17}
+                mapElement={<div style={{ height: "400px" }} />}
+                defaultPosition={defaultPosition}
+                onChange={this.handleLocationChange}
+              />
+            )}
+
+            {this.state.currentUserId === this.state.note.userId ? null : (
               <Button block bsStyle="primary" bsSize="large">
                 Check
               </Button>
-            ) : null}
+            )}
             <LoaderButton
               block
               bsStyle="primary"
