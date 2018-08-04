@@ -61,7 +61,15 @@ export default class Home extends Component {
               header={note.content.trim().split("\n")[0]}
               bsStyle={this.state.currentUserId == note.userId ? "info" : null}
             >
-              {"Created: " + new Date(note.createdAt).toLocaleString()}
+              <div>
+                {"Created: " + new Date(note.createdAt).toLocaleString()}
+              </div>
+              <div>
+                {note.lastUpdatedAt
+                  ? "Updated At: " +
+                    new Date(note.lastUpdatedAt).toLocaleString()
+                  : null}
+              </div>
             </ListGroupItem>
           ) : (
             <ListGroupItem
