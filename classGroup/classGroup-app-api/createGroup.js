@@ -10,10 +10,9 @@ export async function main(event, context, callback) {
     Item: {
       classGroupId: uuid.v1(),
       userId: event.requestContext.identity.cognitoIdentityId,
-      location: data.location,
+      meetingLocation: data.meetingLocation,
       notes: data.notes,
       meetingTime: data.meetingTime,
-      content: data.content,
       attendanceLimit: data.attendanceLimit,
       participantIds: data.participantIds,
       commentIds: data.commentIds,

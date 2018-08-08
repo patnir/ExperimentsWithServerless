@@ -1,6 +1,6 @@
 {
   "body":
-    "{\"notes\":\"hello world\",\"location\":\"RAWLS 1052\",\"meetingTime\":\"9 am\",\"attendanceLimit\":9,\"participantIds\":[1234,4523,132],\"attachment\":\"hello.jpg\"}",
+    "{\"notes\":\"hello world\",\"meetingLocation\":\"RAWLS 1052\",\"meetingTime\":\"9 am\",\"attendanceLimit\":9,\"participantIds\":[1234,4523,132],\"attachment\":\"hello.jpg\"}",
   "requestContext": {
     "identity": {
       "cognitoIdentityId": "USER-SUB-1234"
