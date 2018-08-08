@@ -70,4 +70,12 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+  deleteGroup: 
+    handler: deleteGroup.main
+    events:
+      - http:
+          path: groups/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
 
