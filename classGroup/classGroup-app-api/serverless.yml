@@ -46,4 +46,12 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+  getGroup:
+    handler: getGroup.main
+    events:
+      - http:
+          path: group/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
 
