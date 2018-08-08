@@ -50,7 +50,7 @@ functions:
     handler: getGroup.main
     events:
       - http:
-          path: group/{id}
+          path: groups/{id}
           method: get
           cors: true
           authorizer: aws_iam
