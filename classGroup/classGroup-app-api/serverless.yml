@@ -46,6 +46,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
   getGroup:
     handler: getGroup.main
     events:
@@ -54,6 +55,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   listGroups:
     handler: listGroups.main
     events:
@@ -62,6 +64,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   updateGroup:
     handler: updateGroup.main
     events:
@@ -70,6 +73,7 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+
   deleteGroup: 
     handler: deleteGroup.main
     events:
@@ -78,4 +82,3 @@ functions:
           method: delete
           cors: true
           authorizer: aws_iam
-
