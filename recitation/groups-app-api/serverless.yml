@@ -81,7 +81,7 @@ functions:
     handler: delete_group.main
     events:
       - http:
-          path: notes/{id}
+          path: groups/{id}
           method: delete
           cors: true
           authorizer: aws_iam
