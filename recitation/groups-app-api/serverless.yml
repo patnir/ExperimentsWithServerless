@@ -74,3 +74,14 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+  delete_group:
+    # Defines an HTTP API endpoint that calls the main function in delete.js
+    # - path: url path is /notes/{id}
+    # - method: DELETE request
+    handler: delete_group.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
