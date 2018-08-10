@@ -33,7 +33,7 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  # Defines an HTTP API endpoint that calls the main function in create.js
+  # Defines an HTTP API endpoint that calls the main function in create_group.js
   # - path: url path is /groups
   # - method: POST request
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
@@ -45,5 +45,23 @@ functions:
       - http:
           path: groups
           method: post
+          cors: true
+          authorizer: aws_iam
+
+  get_group:
+    handler: get_group.main
+    events:
+      - http:
+          path: groups/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  list_groups:
+    handler: list_groups.main
+    events:
+      - http:
+          path: groups
+          method: get
           cors: true
           authorizer: aws_iam
