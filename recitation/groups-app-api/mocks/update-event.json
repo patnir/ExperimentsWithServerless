@@ -1,0 +1,6 @@
+{
+  "body": "{\"meetingNotes\":\"hello ASDFASDFASDF\",\"meetingLocation\":\"RAWLS 9999\",\"meetingTime\":\"10 am\",\"attendanceLimit\":20,\"participantIds\":[1234,4523,132],\"attachment\":\"hello.jpg\"}",
+  "pathParameters": {
+    "id": "89605520-9ada-11e8-9443-ffffffffffff"
+  }
+}
