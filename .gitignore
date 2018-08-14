@@ -3,3 +3,6 @@ appinfo.txt
 *config.js
 classGroup/appinfo.txt
 recitation/appinfo.txt
+
+SentimentClassificationIMDb/review_data/*
+SentimentClassificationIMDb/.idea/*
