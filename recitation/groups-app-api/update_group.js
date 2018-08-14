@@ -12,12 +12,13 @@ export async function main(event, context, callback) {
     // 'UpdateExpression' defines the attributes to be updated
     // 'ExpressionAttributeValues' defines the value in the update expression
     UpdateExpression:
-      "SET meetingNotes = :meetingNotes, attachment = :attachment, meetingLocation = :meetingLocation, attendanceLimit= :attendanceLimit, commentIds = :commentIds, participantIds = :participantIds, meetingTime = :meetingTime, updatedAt = :updatedAt",
+      "SET meetingNotes = :meetingNotes, attachment = :attachment, meetingLocation = :meetingLocation, meetingDate = :meetingDate, attendanceLimit= :attendanceLimit, commentIds = :commentIds, participantIds = :participantIds, meetingTime = :meetingTime, updatedAt = :updatedAt",
     ExpressionAttributeValues: {
       ":attachment": data.attachment ? data.attachment : null,
       ":meetingNotes": data.meetingNotes ? data.meetingNotes : null,
       ":meetingTime": data.meetingTime ? data.meetingTime : null,
       ":meetingLocation": data.meetingLocation ? data.meetingLocation : null,
+      ":meetingDate": data.meetingDate ? data.meetingDate : null,
       ":attendanceLimit": data.attendanceLimit ? data.attendanceLimit : null,
       ":commentIds": data.commentIds ? data.commentIds : null,
       ":participantIds": data.participantIds ? data.participantIds : null,

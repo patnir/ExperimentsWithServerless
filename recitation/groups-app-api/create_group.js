@@ -22,7 +22,8 @@ export async function main(event, context, callback) {
 
       meetingTime: data.meetingTime,
       meetingLocation: data.meetingLocation,
-      meetingNotes: data.meetingNotes
+      meetingNotes: data.meetingNotes,
+      meetingDate: data.meetingDate
     }
   };
 
