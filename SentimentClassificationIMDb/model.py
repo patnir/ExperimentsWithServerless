@@ -40,8 +40,8 @@ if __name__ == '__main__':
     df = read_from_csv("all_data.csv")
     vect, model = train(df)
 
-    text2 = get_text("test2.txt")
-    text1 = get_text("test.txt")
+    text2 = get_text("bad.txt")
+    text1 = get_text("good.txt")
 
     print(predict(vect, model, text2))
     print(predict(vect, model, text1))
