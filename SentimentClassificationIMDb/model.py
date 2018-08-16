@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import sys
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import roc_auc_score
@@ -18,7 +19,7 @@ def train(df):
     X_train_vectorized = vect.transform(X_train)
     model = MultinomialNB(alpha=0.1).fit(X_train_vectorized, y_train)
     predictions = model.predict(vect.transform(X_test))
-    print(roc_auc_score(y_test, predictions))
+    # print(roc_auc_score(y_test, predictions))
     return vect, model
 
 
@@ -40,10 +41,20 @@ if __name__ == '__main__':
     df = read_from_csv("all_data.csv")
     vect, model = train(df)
 
-    text2 = get_text("bad.txt")
-    text1 = get_text("good.txt")
+    # text2 = get_text("bad.txt")
+    # text1 = get_text("good.txt")
+    #
+    # print(predict(vect, model, text2))
+    # print(predict(vect, model, text1))
 
-    print(predict(vect, model, text2))
-    print(predict(vect, model, text1))
-
+    movie_files = sys.argv
+    if len(movie_files) > 1:
+        for file in movie_files[1:]:
+            print(file)
+            curr_movie = get_text(file)
+            prediction = predict(vect, model, curr_movie)
+            if prediction == 1:
+                print("Good Review")
+            else:
+                print("Bad Review")
 
