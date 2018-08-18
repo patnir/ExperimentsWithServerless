@@ -6,6 +6,7 @@ import Signup from "./containers/Signup";
 import NotFound from "./containers/NotFound";
 import NewNote from "./containers/NewGroup";
 import AppliedRoute from "./components/AppliedRoute";
+import Sentiment from "./containers/Sentiment";
 
 export default ({ childProps }) => (
   <Switch>
@@ -16,6 +17,12 @@ export default ({ childProps }) => (
       path="/groups/new"
       exact
       component={NewNote}
+      props={childProps}
+    />
+    <AppliedRoute
+      path="/detectingsentiment"
+      exact
+      component={Sentiment}
       props={childProps}
     />
 
