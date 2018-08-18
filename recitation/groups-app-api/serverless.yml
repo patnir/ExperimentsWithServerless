@@ -30,6 +30,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+        - comprehend:DetectSentiment
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
@@ -45,6 +46,15 @@ functions:
       - http:
           path: groups
           method: post
+          cors: true
+          authorizer: aws_iam
+
+  get_sentiment:
+    handler: get_sentiment.main
+    events:
+      - http:
+          path: sentiment
+          method: get
           cors: true
           authorizer: aws_iam
 

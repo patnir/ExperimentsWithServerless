@@ -1,42 +1,44 @@
-import uuid from "uuid";
 import AWS from "aws-sdk";
-
+import { success, failure } from "./libs/response-lib";
 AWS.config.update({ region: "us-east-1" });
-const comprehend = new AWS.Comprehend();
 
-export function main(event, context, callback) {
-  // Request body is passed in as a JSON encoded string in 'event.body'
+export async function main(event, context, callback) {
   const data = JSON.parse(event.body);
-
   const params = {
     LanguageCode: data.LanguageCode,
     Text: data.Text
   };
 
-  comprehend.detectSentiment(params, (error, data) => {
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
-    };
+  try {
+    getSentiment(params, function(result) {
+      console.log("logging");
+      console.log(result);
 
-    if (error) {
-      const response = {
-        statusCode: 500,
-        headers: headers,
-        body: JSON.stringify({ status: false })
-      };
-      callback(null, response);
-      return;
+      if (result.Sentiment) {
+        // Return the retrieved item
+        console.log("Found");
+        callback(null, success(result.Sentiment));
+      } else {
+        callback(
+          null,
+          failure({ status: false, error: "Sentiment not found." })
+        );
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    callback(null, failure({ status: false }));
+  }
+}
+
+function getSentiment(params, fn) {
+  var comprehend = new AWS.Comprehend({ apiVersion: "2017-11-27" });
+
+  comprehend.detectSentiment(params, function(err, data) {
+    if (err) {
+      fn(err);
+    } else {
+      fn(data);
     }
-
-    const response = {
-      statusCode: 200,
-      headers: headers,
-      body: JSON.stringify(params)
-    };
-
-    console.log(data);
-
-    callback(null, response);
   });
 }
