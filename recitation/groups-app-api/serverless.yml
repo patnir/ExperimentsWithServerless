@@ -30,8 +30,11 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-        - comprehend:DetectSentiment
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
+    - Effect: Allow
+      Action:
+        - comprehend:*
+      Resource: "*"
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create_group.js
@@ -54,6 +57,15 @@ functions:
     events:
       - http:
           path: sentiment
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  detect_sentiment:
+    handler: detect_sentiment.main
+    events:
+      - http:
+          path: detect_sentiment
           method: get
           cors: true
           authorizer: aws_iam
