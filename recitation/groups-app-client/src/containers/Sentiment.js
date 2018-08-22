@@ -3,7 +3,8 @@ import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import "antd/dist/antd.css";
 import "./Sentiment.css";
-import { API } from "aws-amplify";
+// import { API } from "aws-amplify";
+import SentimentAnalysis from "sentiment";
 
 export default class Sentiment extends Component {
   constructor(props) {
@@ -18,12 +19,16 @@ export default class Sentiment extends Component {
   }
 
   getSentiment(text) {
-    return API.get("groups", "/detect_sentiment", {
-      body: {
-        LanguageCode: "en",
-        Text: text
-      }
-    });
+    // return API.get("groups", "/detect_sentiment", {
+    //   body: {
+    //     LanguageCode: "en",
+    //     Text: text.text
+    //   }
+    // });
+    console.log(text.text);
+    var sentiment = new SentimentAnalysis();
+    var result = sentiment.analyze(String(text.text));
+    return result;
   }
 
   validateForm() {
@@ -47,11 +52,11 @@ export default class Sentiment extends Component {
         text: this.state.sentimentText
       });
 
-      alert(res);
-
+      console.log(res);
       this.setState({ isLoading: false });
     } catch (e) {
       alert(e);
+      alert("what is going on?");
       this.setState({ isLoading: false });
     }
   };
