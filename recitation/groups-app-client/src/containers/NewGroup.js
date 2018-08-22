@@ -8,7 +8,7 @@ import "antd/dist/antd.css";
 import "./NewGroup.css";
 import { API } from "aws-amplify";
 
-export default class NewNote extends Component {
+export default class NewGroup extends Component {
   constructor(props) {
     super(props);
 
@@ -21,7 +21,8 @@ export default class NewNote extends Component {
       meetingTime: "12:00",
       meetingTimeMoment: null,
       attendanceLimit: 1,
-      meetingNotes: ""
+      meetingNotes: "",
+      participantIds: []
     };
   }
 
@@ -83,7 +84,8 @@ export default class NewNote extends Component {
         meetingDate: this.state.meetingDate,
         meetingTime: this.state.meetingTime,
         attendanceLimit: this.state.attendanceLimit,
-        meetingNotes: this.state.meetingNotes
+        meetingNotes: this.state.meetingNotes,
+        participantIds: this.state.participantIds
       });
       this.props.history.push("/");
     } catch (e) {

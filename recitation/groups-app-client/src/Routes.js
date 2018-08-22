@@ -4,9 +4,10 @@ import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
 import NotFound from "./containers/NotFound";
-import NewNote from "./containers/NewGroup";
+import NewGroup from "./containers/NewGroup";
 import AppliedRoute from "./components/AppliedRoute";
 import Sentiment from "./containers/Sentiment";
+import Groups from "./containers/Groups";
 
 export default ({ childProps }) => (
   <Switch>
@@ -16,13 +17,19 @@ export default ({ childProps }) => (
     <AppliedRoute
       path="/groups/new"
       exact
-      component={NewNote}
+      component={NewGroup}
       props={childProps}
     />
     <AppliedRoute
       path="/detectingsentiment"
       exact
       component={Sentiment}
+      props={childProps}
+    />
+    <AppliedRoute
+      path="/groups/:id"
+      exact
+      component={Groups}
       props={childProps}
     />
 
