@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
 import "./Home.css";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 
 export default class Home extends Component {
   constructor(props) {
@@ -9,11 +9,19 @@ export default class Home extends Component {
 
     this.state = {
       isLoading: true,
-      groups: []
+      groups: [],
+      currentUserId: ""
     };
   }
 
   async componentDidMount() {
+    const userCreds = await Auth.currentUserCredentials();
+    const currentUserId = userCreds.data.IdentityId;
+
+    this.setState({
+      currentUserId
+    });
+
     if (!this.props.isAuthenticated) {
       return;
     }
@@ -47,7 +55,12 @@ export default class Home extends Component {
             }
           >
             {"Created: " + new Date(group.createdAt).toLocaleString()}
+            <br />
             {"Updated at: " + new Date(group.updatedAt).toLocaleString()}
+            <br />
+            {group.userId == this.state.currentUserId
+              ? "Your Group"
+              : "Not Your Group"}
           </ListGroupItem>
         ) : (
           <ListGroupItem

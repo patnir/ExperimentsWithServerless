@@ -12,13 +12,16 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
-    "request": "^2.88.0",
-    "sentiment": "^5.0.1"
+    "sentiment": "^5.0.1",
+    "web-request": "^1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "json-loader": "^0.5.7"
   }
 }

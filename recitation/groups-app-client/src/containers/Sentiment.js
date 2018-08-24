@@ -17,6 +17,7 @@ import "antd/dist/antd.css";
 import "./Sentiment.css";
 import { API } from "aws-amplify";
 import SentimentAnalysis from "sentiment";
+// import * as WebRequest from "web-request";
 
 export default class Sentiment extends Component {
   constructor(props) {
@@ -28,16 +29,17 @@ export default class Sentiment extends Component {
       isLoading: null,
       sentimentText: "",
       movieReviewUrl: "",
-      currentSentiment: null,
+      npm_sentiment: null,
       review: "",
       alertStyle: "",
       movieName: "",
-      movieComponents: null
+      movieComponents: null,
+      comprehend_sentiment: null
     };
   }
 
   getSentimentFromComprehend(text) {
-    return API.get("groups", "/detect_sentiment", {
+    return API.post("groups", "/detect_sentiment", {
       body: {
         LanguageCode: "en",
         Text: text.text
@@ -50,7 +52,7 @@ export default class Sentiment extends Component {
     var sentiment = new SentimentAnalysis();
     var result = sentiment.analyze(String(text.text));
     this.setState({
-      currentSentiment: result
+      npm_sentiment: result
     });
 
     var currentReview = "Negative";
@@ -98,6 +100,14 @@ export default class Sentiment extends Component {
     var res = "";
 
     try {
+      res = await this.getSentimentFromComprehend({
+        text: this.state.sentimentText
+      });
+      console.log("Is This Going To Work");
+      console.log(res);
+      this.setState({
+        comprehend_sentiment: res
+      });
       res = await this.getSentiment({
         text: this.state.sentimentText
       });
@@ -111,18 +121,23 @@ export default class Sentiment extends Component {
     }
   };
 
-  getReviewDetails = async event => {
-    event.preventDefault();
-    var result = null;
-    this.setState({ isLoading: true });
-    try {
-      this.setState({ isLoading: false });
-    } catch (e) {
-      console.log("Movie Review Error");
-      console.log(e);
-      this.setState({ isLoading: false });
-    }
-  };
+  // getReviewDetails = async event => {
+  //   event.preventDefault();
+  //   var result = null;
+  //   this.setState({ isLoading: true });
+  //   console.log(this.state.movieReviewUrl);
+  //   try {
+  //     this.setState({ isLoading: false });
+  //     // result = await WebRequest.get("http://www.google.com/");
+  //   } catch (e) {
+  //     console.log("Movie Review Error");
+  //     console.log(e);
+  //     this.setState({ isLoading: false });
+  //   }
+  //   console.log("Result is...");
+  //   // console.log(result.content);
+  //   return result;
+  // };
 
   getMovieDetails = async event => {
     event.preventDefault();
@@ -162,14 +177,15 @@ export default class Sentiment extends Component {
           />
         </FormGroup>
         <FormGroup>
-          {this.state.currentSentiment ? (
-            <Alert bsStyle={this.state.alertStyle}>
+          {this.state.npm_sentiment ? (
+            <Alert
+              bsStyle={
+                this.state.alertStyle ? this.state.alertStyle : "success"
+              }
+            >
               <h4>{this.state.review} Review</h4>
-              <p>
-                Change this and that and try again. Duis mollis, est non commodo
-                luctus, nisi erat porttitor ligula, eget lacinia odio sem nec
-                elit. Cras mattis consectetur purus sit amet fermentum.
-              </p>
+              <p>{JSON.stringify(this.state.npm_sentiment)}</p>
+              <p>{JSON.stringify(this.state.comprehend_sentiment)}</p>
             </Alert>
           ) : (
             <div />
@@ -211,7 +227,7 @@ export default class Sentiment extends Component {
 
   renderMovieLookupForm() {
     return (
-      <div class="MovieLookup">
+      <div className="MovieLookup">
         <form onSubmit={this.getMovieDetails}>
           <Row className="show-grid">
             <Col xs={12} md={8}>
@@ -266,47 +282,45 @@ export default class Sentiment extends Component {
     );
   }
 
-  renderMovieReviewForm() {
-    return (
-      <div class="MovieReview">
-        <form onSubmit={this.getMovieDetails}>
-          <Row className="show-grid">
-            <Col xs={12} md={8}>
-              <FormGroup controlId="movieReviewUrl">
-                <ControlLabel>Enter URL for movie review</ControlLabel>
-                <FormControl
-                  placeholder="https://www.imdb.com/review/rw1908115/?ref_=tt_urv"
-                  onChange={this.handleChange}
-                  value={this.state.movieReviewUrl}
-                  componentClass="textarea"
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <LoaderButton
-                block
-                bsStyle="primary"
-                bsSize="large"
-                disabled={!this.validateMovieForm()}
-                type="submit"
-                isLoading={this.state.isLoading}
-                text="Detect Sentiment of Movie Review"
-                loadingText="Detecting..."
-                id="movieLookupReviewButton"
-              />
-            </Col>
-          </Row>
-        </form>
-      </div>
-    );
-  }
+  // renderMovieReviewForm() {
+  //   return (
+  //     <div class="MovieReview">
+  //       <form onSubmit={this.getReviewDetails}>
+  //         <Row className="show-grid">
+  //           <Col xs={12} md={8}>
+  //             <FormGroup controlId="movieReviewUrl">
+  //               <ControlLabel>Enter URL for movie review</ControlLabel>
+  //               <FormControl
+  //                 placeholder="https://www.imdb.com/review/rw1908115/?ref_=tt_urv"
+  //                 onChange={this.handleChange}
+  //                 value={this.state.movieReviewUrl}
+  //                 componentClass="textarea"
+  //               />
+  //             </FormGroup>
+  //           </Col>
+  //           <Col xs={12} md={4}>
+  //             <LoaderButton
+  //               block
+  //               bsStyle="primary"
+  //               bsSize="large"
+  //               disabled={!this.validateMovieForm()}
+  //               type="submit"
+  //               isLoading={this.state.isLoading}
+  //               text="Detect Sentiment of Movie Review"
+  //               loadingText="Detecting..."
+  //               id="movieLookupReviewButton"
+  //             />
+  //           </Col>
+  //         </Row>
+  //       </form>
+  //     </div>
+  //   );
+  // }
 
   render() {
     return (
       <div className="Sentiment">
-        <PageHeader>
-          Detect Sentiment <small>From...</small>
-        </PageHeader>
+        <PageHeader>Detect Sentiment</PageHeader>
         <Tabs
           style={{ margin: "20px" }}
           defaultActiveKey={1}
@@ -316,10 +330,7 @@ export default class Sentiment extends Component {
           <Tab style={{ margin: "20px" }} eventKey={1} title="Text">
             {this.renderForm()}
           </Tab>
-          <Tab style={{ margin: "20px" }} eventKey={2} title="Movie Review">
-            {this.renderMovieReviewForm()}
-          </Tab>
-          <Tab style={{ margin: "20px" }} eventKey={3} title="Movie Lookup">
+          <Tab style={{ margin: "20px" }} eventKey={2} title="Movie Lookup">
             {this.renderMovieLookupForm()}
           </Tab>
         </Tabs>
