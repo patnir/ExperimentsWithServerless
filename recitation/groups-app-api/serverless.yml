@@ -52,21 +52,12 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  get_sentiment:
-    handler: get_sentiment.main
-    events:
-      - http:
-          path: sentiment
-          method: get
-          cors: true
-          authorizer: aws_iam
-
   detect_sentiment:
     handler: detect_sentiment.main
     events:
       - http:
           path: detect_sentiment
-          method: get
+          method: post
           cors: true
           authorizer: aws_iam
 

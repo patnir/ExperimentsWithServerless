@@ -16,12 +16,15 @@ export function main(event, context, callback) {
     // Set response headers to enable CORS (Cross-Origin Resource Sharing)
     const headers = {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Max-Age": 86400
     };
 
     // Return status code 500 on error
     if (error) {
-      console.log(error);
+      // console.log(error);
       const response = {
         statusCode: 500,
         headers: headers,
@@ -32,7 +35,7 @@ export function main(event, context, callback) {
     }
 
     // Return status code 200 and the newly created item
-    console.log(data);
+    // console.log(data);
     const response = {
       statusCode: 200,
       headers: headers,
