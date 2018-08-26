@@ -60,7 +60,10 @@ export default class Home extends Component {
             <br />
             {group.userId == this.state.currentUserId
               ? "Your Group"
-              : "Not Your Group"}
+              : group.participantIds &&
+                group.participantIds.length === group.attendanceLimit
+                ? "This group is full"
+                : "This group is not full"}
           </ListGroupItem>
         ) : (
           <ListGroupItem

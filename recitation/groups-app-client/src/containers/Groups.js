@@ -1,11 +1,21 @@
 import React, { Component } from "react";
 import { API, Auth } from "aws-amplify";
 import config from "../config";
-import { FormGroup, FormControl, ControlLabel, Col } from "react-bootstrap";
+import {
+  Panel,
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  Col,
+  ListGroup,
+  ListGroupItem
+} from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import moment from "moment";
 import "antd/dist/antd.css";
+import "./Groups.css";
 import { DatePicker, TimePicker, InputNumber } from "antd";
+import { ResourceGroupsTaggingAPI } from "../../node_modules/aws-sdk/clients/all";
 
 const format = "HH:mm";
 
@@ -54,6 +64,14 @@ export default class Groups extends Component {
             currentUserIsAParticipant: true
           });
         }
+      }
+      console.log(group.meetingTime);
+      if (
+        group.meetingTime == null ||
+        group.meetingTime == "" ||
+        group.meetingTime == "Invalid date"
+      ) {
+        group.meetingTime = "12:00";
       }
 
       const {
@@ -190,6 +208,12 @@ export default class Groups extends Component {
     });
   };
 
+  handleInputNumberChange = number => {
+    this.setState({
+      attendanceLimit: number
+    });
+  };
+
   handleDatePickerChange = (date, dateString) => {
     console.log(date, dateString);
     this.setState({
@@ -264,6 +288,7 @@ export default class Groups extends Component {
               min={1}
               max={10}
               defaultValue={3}
+              value={this.state.attendanceLimit}
               onChange={this.handleInputNumberChange}
             />
           </FormGroup>
@@ -290,10 +315,47 @@ export default class Groups extends Component {
     );
   }
 
+  renderInformationPanel() {
+    return (
+      <Panel className="InformationPanel">
+        <Panel.Heading>Group Information</Panel.Heading>
+        <Panel.Body>Agenda: {this.state.meetingNotes}</Panel.Body>
+        <Panel.Body>
+          <ListGroup>
+            <ListGroupItem>Where: {this.state.meetingLocation}</ListGroupItem>
+            <ListGroupItem>
+              When: {this.state.meetingDate} @ {this.state.meetingTime}
+            </ListGroupItem>
+            <ListGroupItem>
+              Attendance Total: {this.state.attendanceLimit}
+            </ListGroupItem>
+          </ListGroup>
+        </Panel.Body>
+        <Panel.Body>Owner: {this.state.currentUserId}</Panel.Body>
+      </Panel>
+    );
+  }
+
   renderODM_Filled() {
     return (
       <div>
         <h3>This ClassGroup is Full</h3>
+        <h5>
+          {this.state.groupAndOwnerMatch
+            ? "You are the owner of this group"
+            : " You are NOT the owner of this group."}
+        </h5>
+        <h5>
+          {this.state.currentUserIsAParticipant
+            ? "You are part of this group"
+            : "You are NOT part of this group."}
+        </h5>
+        {this.state.groupAndOwnerMatch ||
+        this.state.currentUserIsAParticipant ? (
+          <div>{this.renderInformationPanel()}</div>
+        ) : (
+          <div />
+        )}
       </div>
     );
   }
@@ -301,6 +363,7 @@ export default class Groups extends Component {
   renderODM_NotFilled() {
     return (
       <div className="lander">
+        <div>{this.renderInformationPanel()}</div>
         <h3>
           This ClassGroup will be activated when enough people sign up for this
           group
