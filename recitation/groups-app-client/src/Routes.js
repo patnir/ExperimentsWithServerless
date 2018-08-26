@@ -8,25 +8,37 @@ import NewGroup from "./containers/NewGroup";
 import AppliedRoute from "./components/AppliedRoute";
 import Sentiment from "./containers/Sentiment";
 import Groups from "./containers/Groups";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
 export default ({ childProps }) => (
   <Switch>
     <AppliedRoute path="/" exact component={Home} props={childProps} />
-    <AppliedRoute path="/login" exact component={Login} props={childProps} />
-    <AppliedRoute path="/signup" exact component={Signup} props={childProps} />
-    <AppliedRoute
+    <UnauthenticatedRoute
+      path="/login"
+      exact
+      component={Login}
+      props={childProps}
+    />
+    <UnauthenticatedRoute
+      path="/signup"
+      exact
+      component={Signup}
+      props={childProps}
+    />
+    <AuthenticatedRoute
       path="/groups/new"
       exact
       component={NewGroup}
       props={childProps}
     />
     <AppliedRoute
-      path="/detectingsentiment"
+      path="/sentiment"
       exact
       component={Sentiment}
       props={childProps}
     />
-    <AppliedRoute
+    <AuthenticatedRoute
       path="/groups/:id"
       exact
       component={Groups}
