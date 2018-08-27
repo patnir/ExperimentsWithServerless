@@ -1,21 +1,16 @@
-import AWS from "aws-sdk";
+import { Storage } from "aws-amplify";
 
-export async function detectSentiment(text) {
-  const params = {
-    region: "us-east-t",
-    LanguageCode: "en",
-    Text: text
-  };
+export async function s3Upload(file) {
+  const filename = `${Date.now()}-${file.name}`;
 
-  console.log(text);
-
-  var comprehend = new AWS.Comprehend();
-
-  comprehend.detectSentiment(params, function(err, data) {
-    if (err) console.log(err, err.stack);
-    // an error occurred
-    else console.log(data); // successful response
+  const stored = await Storage.vault.put(filename, file, {
+    contentType: file.type
   });
 
-  return null;
+  return stored.key;
+}
+
+export async function s3Download(filename) {
+  var downloaded = await Storage.vault.get(filename);
+  return downloaded;
 }

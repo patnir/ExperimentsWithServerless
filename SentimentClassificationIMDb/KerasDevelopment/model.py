@@ -10,13 +10,40 @@ from keras.layers import Flatten
 from keras.layers import Embedding
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
+import tensorflowjs as tfjs
 
 vocab_size = 500
+
 
 def read_from_csv(file_name):
     df = pd.read_csv(file_name, sep=",")
     df["y"] = df["y"].astype("int16")
     return df
+
+
+def tensorflow_model(data):
+    X_train, X_test, y_train, y_test = train_test_split(data['Text'], data['y'], random_state=0)
+    tokenizer = Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~ ', lower=True, split=' ',
+                          char_level=False, oov_token=None)
+    tokenizer.fit_on_texts(X_train)
+    X_train_Encoded = tokenizer.texts_to_matrix(X_train, mode='count')
+
+    model = Sequential()
+    model.add(Embedding(vocab_size, 100, input_length=vocab_size))
+    model.add(Conv1D(filters=32, kernel_size=8, activation='relu'))
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Flatten())
+    model.add(Dense(10, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    print(model.summary())
+
+    # compile network
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # fit network
+    model.fit(X_train_Encoded, y_train, epochs=7, verbose=2)
+    tfjs_target_dir = "./tfjs_keras"
+    model.save("keras_sentiment_model.h5")
+    tfjs.converters.save_keras_model(model, tfjs_target_dir)
 
 
 def predict(model, tokenizer, test_review):
@@ -189,8 +216,13 @@ def train_predict_without_tokenizer_specific():
     prediction = predict_without_tokenizer(model, tokenized[0:vocab_size])
     print(prediction)
 
+
 if __name__ == '__main__':
     # work_train()
-    train_predict_without_tokenizer()
+    # train_predict_without_tokenizer()
     # train_predict_without_tokenizer_specific()
+    df = read_from_csv("../all_data.csv")
+    tensorflow_model(df)
+
+
 
