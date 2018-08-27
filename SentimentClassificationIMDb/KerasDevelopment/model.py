@@ -11,6 +11,7 @@ from keras.layers import Embedding
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 
+vocab_size = 500
 
 def read_from_csv(file_name):
     df = pd.read_csv(file_name, sep=",")
@@ -20,6 +21,7 @@ def read_from_csv(file_name):
 
 def predict(model, tokenizer, test_review):
     curr = tokenizer.texts_to_matrix([test_review], mode='count')
+    print("=====================================")
     print(np.shape(curr))
     # print(np.shape(curr[0]))
     result = model.predict(curr)
@@ -30,18 +32,9 @@ def predict(model, tokenizer, test_review):
     return 0
 
 
-def train_tokenizer(data):
-    vocab_size = 200
-    num_labels = 2
-    X_train, X_test, y_train, y_test = train_test_split(data['Text'], data['y'], random_state=0)
-    tokenizer = Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~ ', lower=True, split=' ',
-                          char_level=False, oov_token=None)
-    # print(X_train)
-    tokenizer.fit_on_texts(X_train)
-    return tokenizer
 
 def train(data):
-    vocab_size = 200
+
     num_labels = 2
     X_train, X_test, y_train, y_test = train_test_split(data['Text'], data['y'], random_state=0)
     tokenizer = Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~ ', lower=True, split=' ', char_level=False, oov_token=None)
@@ -76,10 +69,10 @@ def train(data):
     loss, acc = model.evaluate(X_test_Encoded, y_test, verbose=0)
     print('Test Accuracy: %f' % (acc * 100))
 
-    print(np.shape(X_test_Encoded))
-    print(np.shape(X_test_Encoded[0]))
-    print(np.shape(model.predict(X_test_Encoded)))
-    print(np.shape(model.predict(X_test_Encoded)))
+    # print(np.shape(X_test_Encoded))
+    # print(np.shape(X_test_Encoded[0]))
+    # print(np.shape(model.predict(X_test_Encoded)))
+    # print(np.shape(model.predict(X_test_Encoded)))
 
     # x_train_tokenized = tokenizer.token_counts(X_train, mode='binary')
     # print(x_train_tokenized[0])
@@ -92,14 +85,47 @@ def get_text(filename):
     text = f.read()
     f.close()
     text = text.replace(",", " ").strip()
+    text = text.lower()
+    text = re.sub(r"[!\"#$%&()*+,-./:;<=>?@\[\\\]^_`{|}~]+", ' ', text)
     text = re.sub('\s+', ' ', text).strip()
     return text
 
 
-if __name__ == '__main__':
+def train_tokenizer(data):
+    vocab_size = 200
+    num_labels = 2
+    X_train, X_test, y_train, y_test = train_test_split(data['Text'], data['y'], random_state=0)
+    tokenizer = Tokenizer(num_words=vocab_size, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~ ', lower=True, split=' ',
+                          char_level=False, oov_token=None)
+    # print(X_train)
+    tokenizer.fit_on_texts(X_train)
+    word_index = tokenizer.word_index
+    # print(word_index)
+    # for i in word_index.keys()[100:600]:
+    count = 0
+    curr = ["", ""] * 250
+    # print(curr)
+    for i in word_index:
+        if count == 500:
+            break
+        curr[count] = [i, int(word_index[i])]
+        count += 1
+    # print(np.vstack([word_index.keys(), word_index.values()]))
+    curr = np.array(curr)
+    print(np.shape(curr))
+    df = pd.DataFrame(data=curr, columns=["Words", "Index"])
+    df.to_csv("word_index.csv",index=False)
+
+    # word_index = pd.DataFrame(data=word_index.keys(), word_index.values()))
+    # word_count = pd.DataFrame(data=tokenizer.word_counts)
+    # print(word_index)
+
+    return tokenizer
+
+
+def work_train():
     df = read_from_csv("../all_data.csv")
     model, tokenizer = train(df)
-    # tokenizer = train_tokenizer(df)
     movie_files = sys.argv
     if len(movie_files) > 1:
         for file in movie_files[1:]:
@@ -110,4 +136,61 @@ if __name__ == '__main__':
                 print("Good Review")
             else:
                 print("Bad Review")
+
+
+def create_dictionary():
+    curr = pd.read_csv("word_index.csv")
+    # print(np.array(curr["Words"]))
+    words = np.array(curr["Words"])
+    index = np.array(curr["Index"])
+    return dict(zip(words, index))
+
+
+def create_index_array(text, word_index):
+    current = np.zeros((len(word_index), 1))
+    for i in text.split(" "):
+        if i in word_index:
+            current[word_index[i]] += 1
+    return current
+
+
+def predict_without_tokenizer(model, matrix):
+    result = model.predict(np.transpose(matrix))
+    print("result value {}".format(result[0][0]))
+    if result[0][0] > 0.5:
+        return 1
+    return 0
+
+
+
+def train_predict_without_tokenizer():
+    df = read_from_csv("../all_data.csv")
+    model, tokenizer = train(df)
+    word_index = create_dictionary()
+    movie_files = sys.argv
+    if len(movie_files) > 1:
+        for file in movie_files[1:]:
+            print(file)
+            curr_movie = get_text(file)
+            tokenized = create_index_array(curr_movie, word_index)
+            prediction = predict_without_tokenizer(model, tokenized[0:vocab_size])
+            if prediction == 1:
+                print("Good Review")
+            else:
+                print("Bad Review")
+
+def train_predict_without_tokenizer_specific():
+    df = read_from_csv("../all_data.csv")
+    model, tokenizer = train(df)
+    word_index = create_dictionary()
+    text = get_text("test1.txt")
+    tokenized = create_index_array(text, word_index)
+    print(np.shape(tokenized))
+    prediction = predict_without_tokenizer(model, tokenized[0:vocab_size])
+    print(prediction)
+
+if __name__ == '__main__':
+    # work_train()
+    train_predict_without_tokenizer()
+    # train_predict_without_tokenizer_specific()
 
