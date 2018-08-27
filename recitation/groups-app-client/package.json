@@ -6,6 +6,7 @@
     "ajv": "^6.5.3",
     "antd": "^3.8.0",
     "aws-amplify": "^1.0.5",
+    "enzyme": "^3.5.0",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.2",
@@ -13,7 +14,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "sentiment": "^5.0.1",
-    "web-request": "^1.0.7"
+    "web-request": "^1.0.7",
+    "word-ngrams": "^0.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

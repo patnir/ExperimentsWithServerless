@@ -8,6 +8,7 @@ export default class Sentiment_Comprehend extends Component {
     super(props);
     this.state = {
       isLoading: false,
+      review: "",
       sentimentText: "",
       npm_sentiment: null,
       alertStyle: null

@@ -3,6 +3,7 @@ import { Tabs, PageHeader, Tab } from "react-bootstrap";
 import "./Sentiment.css";
 import Sentiment_Comprehend from "./Sentiment/Sentiment_Comprehend";
 import Sentiment_NPM from "./Sentiment/Sentiment_NPM";
+import Sentiment_Tensorflow from "./Sentiment/Sentiment_Tensorflow";
 import Movie_Lookup from "./Sentiment/Movie_Lookup";
 
 export default class Sentiment extends Component {
@@ -47,7 +48,14 @@ export default class Sentiment extends Component {
           >
             {<Sentiment_NPM />}
           </Tab>
-          <Tab style={{ margin: "20px" }} eventKey={3} title="Movie Lookup">
+          <Tab
+            style={{ margin: "20px" }}
+            eventKey={3}
+            title="Tensorflow and Keras"
+          >
+            {<Sentiment_Tensorflow />}
+          </Tab>
+          <Tab style={{ margin: "20px" }} eventKey={4} title="Movie Lookup">
             {<Movie_Lookup />}
           </Tab>
         </Tabs>
