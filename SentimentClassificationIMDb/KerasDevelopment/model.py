@@ -27,6 +27,7 @@ def tensorflow_model(data):
                           char_level=False, oov_token=None)
     tokenizer.fit_on_texts(X_train)
     X_train_Encoded = tokenizer.texts_to_matrix(X_train, mode='count')
+    X_test_Encoded = tokenizer.texts_to_matrix(X_test, mode='count')
 
     model = Sequential()
     model.add(Embedding(vocab_size, 100, input_length=vocab_size))
@@ -35,15 +36,19 @@ def tensorflow_model(data):
     model.add(Flatten())
     model.add(Dense(10, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
-    print(model.summary())
+    # print(model.summary())
 
     # compile network
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     # fit network
     model.fit(X_train_Encoded, y_train, epochs=7, verbose=2)
     tfjs_target_dir = "./tfjs_keras"
-    model.save("keras_sentiment_model.h5")
+    # model.save("keras_sentiment_model.h5")
     tfjs.converters.save_keras_model(model, tfjs_target_dir)
+
+    res = model.predict(X_test_Encoded)
+    # print(res)
+    # print(sum(res == y_test))
 
 
 def predict(model, tokenizer, test_review):
@@ -206,6 +211,7 @@ def train_predict_without_tokenizer():
             else:
                 print("Bad Review")
 
+
 def train_predict_without_tokenizer_specific():
     df = read_from_csv("../all_data.csv")
     model, tokenizer = train(df)
@@ -217,12 +223,24 @@ def train_predict_without_tokenizer_specific():
     print(prediction)
 
 
+def load_from_model(filename, data):
+    model = tfjs.converters.load_keras_model("tfjs_keras/model.json")
+    print(model.predict(np.transpose(data)))
+    # print(model.predict(data))
+    return
+
+
 if __name__ == '__main__':
     # work_train()
     # train_predict_without_tokenizer()
     # train_predict_without_tokenizer_specific()
-    df = read_from_csv("../all_data.csv")
-    tensorflow_model(df)
+    # df = read_from_csv("../all_data.csv")
+    # tensorflow_model(df)
+    file = "Mac_and_Me_review.txt"
+    word_index = create_dictionary()
+    curr_movie = get_text(file)
+    tokenized = create_index_array(curr_movie, word_index)
+    load_from_model("tfjs_keras/model.json", tokenized)
 
 
 

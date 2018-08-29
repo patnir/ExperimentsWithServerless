@@ -15,7 +15,9 @@ export default class Sentiment_Comprehend extends Component {
       sentimentText: "",
       tensor_sentiment: null,
       alertStyle: "warning",
-      word_counts: null
+      word_counts: null,
+      review: "",
+      currentPrediction: 0
     };
 
     this.word_index = {
@@ -573,12 +575,10 @@ export default class Sentiment_Comprehend extends Component {
 
       console.log(res);
 
-      console.log("Getting file");
-
-      var filename = "model2.json";
-
-      fileContents = await s3Download(filename);
-      console.log(fileContents);
+      // console.log("Getting file");
+      // var filename = "model.json";
+      // fileContents = await s3Download(filename);
+      // console.log(fileContents);
 
       console.log("loading model");
       const model = await tf.loadModel(
@@ -587,9 +587,28 @@ export default class Sentiment_Comprehend extends Component {
 
       console.log(model);
 
-      // var prediction = model.predict(tf.tensor1d(this.state.word_counts));
-      model.predict(tf.tensor2d(this.state.word_counts, [1, 500])).print();
-      // console.log(prediction);
+      var currentTensor = tf.tensor2d([this.state.word_counts], [1, 500]);
+      currentTensor.print();
+
+      var prediction = await model.predict(currentTensor).data();
+      console.log(prediction[0]);
+
+      var currentPrediction = prediction[0] * 100;
+      var alertStyle = "warning";
+      var review = "NEUTRAL";
+
+      if (currentPrediction > 55) {
+        review = "POSITIVE";
+        alertStyle = "success";
+      } else if (currentPrediction < 45) {
+        review = "NEGATIVE";
+        alertStyle = "danger";
+      }
+      this.setState({
+        review,
+        currentPrediction,
+        alertStyle
+      });
 
       this.setState({ isLoading: false });
     } catch (e) {
@@ -612,12 +631,15 @@ export default class Sentiment_Comprehend extends Component {
           />
         </FormGroup>
         <FormGroup>
-          {this.state.tensor_sentiment ? (
+          {this.state.tensor_sentiment && this.state.isLoading === false ? (
             <Alert
               bsStyle={
                 this.state.alertStyle ? this.state.alertStyle : "success"
               }
             >
+              <h4>
+                {this.state.review} Review: {this.state.currentPrediction}%
+              </h4>
               <p>{JSON.stringify(this.state.tensor_sentiment)}</p>
               <p>{this.state.word_counts}</p>
             </Alert>
