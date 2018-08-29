@@ -11,6 +11,6 @@ export async function s3Upload(file) {
 }
 
 export async function s3Download(filename) {
-  var downloaded = await Storage.vault.get(filename);
+  var downloaded = await Storage.get(filename);
   return downloaded;
 }

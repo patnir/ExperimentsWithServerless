@@ -58,7 +58,7 @@ export default class Home extends Component {
             <br />
             {"Updated at: " + new Date(group.updatedAt).toLocaleString()}
             <br />
-            {group.userId == this.state.currentUserId
+            {group.userId === this.state.currentUserId
               ? "Your Group"
               : group.participantIds &&
                 group.participantIds.length === group.attendanceLimit

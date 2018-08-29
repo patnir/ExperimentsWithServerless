@@ -51,7 +51,6 @@ export default class Sentiment_Comprehend extends Component {
     event.preventDefault();
 
     this.setState({ isLoading: true });
-    var res = "";
 
     try {
       await this.getSentimentFromNPM({

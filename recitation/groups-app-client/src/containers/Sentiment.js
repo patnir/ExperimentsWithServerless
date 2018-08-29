@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Tabs, PageHeader, Tab } from "react-bootstrap";
 import "./Sentiment.css";
-import Sentiment_Comprehend from "./Sentiment/Sentiment_Comprehend";
-import Sentiment_NPM from "./Sentiment/Sentiment_NPM";
-import Sentiment_Tensorflow from "./Sentiment/Sentiment_Tensorflow";
-import Movie_Lookup from "./Sentiment/Movie_Lookup";
+import SentimentComprehend from "./Sentiment/Sentiment_Comprehend";
+import SentimentNPM from "./Sentiment/Sentiment_NPM";
+import SentimentTensorflow from "./Sentiment/Sentiment_Tensorflow";
+import MovieLookup from "./Sentiment/Movie_Lookup";
 
 export default class Sentiment extends Component {
   constructor(props) {
@@ -39,24 +39,24 @@ export default class Sentiment extends Component {
           id="noanim-tab-example"
         >
           <Tab style={{ margin: "20px" }} eventKey={1} title="AWS Comprehend">
-            {<Sentiment_Comprehend />}
+            {<SentimentComprehend />}
           </Tab>
           <Tab
             style={{ margin: "20px" }}
             eventKey={2}
             title="NPM Sentiment Analysis"
           >
-            {<Sentiment_NPM />}
+            {<SentimentNPM />}
           </Tab>
           <Tab
             style={{ margin: "20px" }}
             eventKey={3}
             title="Tensorflow and Keras"
           >
-            {<Sentiment_Tensorflow />}
+            {<SentimentTensorflow />}
           </Tab>
           <Tab style={{ margin: "20px" }} eventKey={4} title="Movie Lookup">
-            {<Movie_Lookup />}
+            {<MovieLookup />}
           </Tab>
         </Tabs>
       </div>
