@@ -32,7 +32,7 @@ export default ({ childProps }) => (
       component={NewGroup}
       props={childProps}
     />
-    <AppliedRoute
+    <AuthenticatedRoute
       path="/sentiment"
       exact
       component={Sentiment}

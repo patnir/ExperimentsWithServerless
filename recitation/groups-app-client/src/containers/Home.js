@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
 import "./Home.css";
+import { Link } from "react-router-dom";
 import { API, Auth } from "aws-amplify";
 
 export default class Home extends Component {
@@ -86,18 +87,18 @@ export default class Home extends Component {
 
   renderLander() {
     return (
-      <div className="Home">
-        <div className="lander">
-          <h1>ClassGroup</h1>
-          <p>
-            <strong>Sign up</strong> for a study group
-          </p>
-          <p>
-            <strong>Meet</strong> new students
-          </p>
-          <p>
-            <strong>Ace</strong> your exam
-          </p>
+      <div className="lander">
+        <h1>Positivty Detector</h1>
+        <p>
+          Use Sentiment Analysis and ML to check how positive are your words
+        </p>
+        <div>
+          <Link to="/login" className="btn btn-success btn-lg">
+            Login
+          </Link>
+          <Link to="/signup" className="btn btn-info btn-lg">
+            Signup
+          </Link>
         </div>
       </div>
     );

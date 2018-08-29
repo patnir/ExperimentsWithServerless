@@ -8,6 +8,10 @@
   font-weight: 600;
 }
 
+.Home .lander .btn {
+  margin: 25px;
+}
+
 .Home .lander p {
   color: #999;
 }

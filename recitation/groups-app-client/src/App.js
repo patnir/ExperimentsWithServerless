@@ -52,7 +52,7 @@ class App extends Component {
           <Navbar fluid collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
-                <Link to="/">ClassGroup</Link>
+                <Link to="/">Positivity Detector</Link>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
@@ -62,9 +62,6 @@ class App extends Component {
                   <NavItem onClick={this.handleLogout}>Logout</NavItem>
                 ) : (
                   <Fragment>
-                    <LinkContainer to="/sentiment">
-                      <NavItem>Detect Sentiment</NavItem>
-                    </LinkContainer>
                     <LinkContainer to="/signup">
                       <NavItem>Signup</NavItem>
                     </LinkContainer>
